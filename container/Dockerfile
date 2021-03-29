@@ -27,9 +27,9 @@ RUN set -ex && \
 #install python3.7
 RUN apt-get update && apt-get install -y software-properties-common && \
     apt-add-repository -r ppa:armagetronad-dev/ppa && \
-    apt-get update && apt-get install -y ${PY_V} python3-pip \
+    apt-get update && apt-get install -y $PY_V python3-pip \
     python3-distutils python3-setuptools && \
-    ${PY_V} -m pip install pip --upgrade pip && \
+    $PY_V -m pip install pip --upgrade pip && \
     echo "alias python=${PY_V}" >> ~/.bashrc && \
     export PATH=${PATH}:/usr/bin/${PY_V} && \
     /bin/bash -c "source ~/.bashrc" && \

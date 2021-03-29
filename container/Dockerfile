@@ -2,7 +2,7 @@ ARG JAVA_V=11-jre-slim
 ARG PY_V=python3.7
 ARG SPARK_V=spark-3.1.1
 
-FROM openjdk:${JAVA_V}
+FROM openjdk:11-jre-slim
 
 RUN apt-get update -y && apt-get install -y libzbar-dev bash gcc git libc-dev curl wget vim nano \
     && apt-get install -y iputils-ping telnet openssh-client net-tools \
@@ -27,25 +27,25 @@ RUN set -ex && \
 #install python3.7
 RUN apt-get update && apt-get install -y software-properties-common && \
     apt-add-repository -r ppa:armagetronad-dev/ppa && \
-    apt-get update && apt-get install -y $PY_V python3-pip \
+    apt-get update && apt-get install -y python3.7 python3-pip \
     python3-distutils python3-setuptools && \
-    $PY_V -m pip install pip --upgrade pip && \
-    echo "alias python=${PY_V}" >> ~/.bashrc && \
-    export PATH=${PATH}:/usr/bin/${PY_V} && \
+    python3.7 -m pip install pip --upgrade pip && \
+    echo "alias python=python3.7" >> ~/.bashrc && \
+    export PATH=${PATH}:/usr/bin/python3.7 && \
     /bin/bash -c "source ~/.bashrc" && \
-    update-alternatives --install /usr/bin/python python /usr/bin/${PY_V} 1 && \
-    update-alternatives --set python /usr/bin/${PY_V}
+    update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1 && \
+    update-alternatives --set python /usr/bin/python3.7
 
 # install spark
-RUN wget --no-verbose https://downloads.apache.org/spark/${SPARK_V}/${SPARK_V}-bin-hadoop3.2.tgz && \
-    tar -xzvf ${SPARK_V}-bin-hadoop3.2.tgz && \
-    mv ${SPARK_V}-bin-hadoop3.2 /opt/spark && \
-    rm -rf ${SPARK_V}-bin-hadoop3.2.tgz
+RUN wget --no-verbose https://archive.apache.org/dist/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz && \
+    tar -xzvf spark-3.1.1-bin-hadoop3.2.tgz && \
+    mv spark-3.1.1-bin-hadoop3.2 /opt/spark && \
+    rm -rf spark-3.1.1-bin-hadoop3.2.tgz
 
 ENV SPARK_HOME=/opt/spark
 ENV PATH=$PATH:$SPARK_HOME/bin
 ENV PATH=$PATH:$SPARK_HOME/sbin
-ENV PYTHONPATH=$SPARK_HOME/python3:$SPARK_HOME/python3/lib/py4j-0.10.7-src.zip:$PYTHONPATH
+ENV PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.9-src.zip:$PYTHONPATH
 
 COPY container/requirements.txt requirements.txt
 RUN pip install --upgrade pip && \

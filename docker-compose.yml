@@ -4,5 +4,5 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./container/Dockerfile
+      dockerfile: ./example/Dockerfile
     command: sleep infinity

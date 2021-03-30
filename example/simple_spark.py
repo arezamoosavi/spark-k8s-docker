@@ -26,6 +26,9 @@ def main(app_name="Simple Tasks"):
     logger.info("THE RESULT IS:")
     logger.info(result)
 
+    sc.stop()
+    spark.stop()
+
 
 if __name__ == "__main__":
     main("Simple Tasks")
